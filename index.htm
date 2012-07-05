@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-<title>i:gram</title>
+<title>i:gram - instagram roll</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -98,8 +98,8 @@ var slot = {
       this.it = null;
     } else {
       this.want = true;
-      this.ask();
     }
+    this.ask();
   },
   ask: function(d) {
     if(!this.url || this.lastUrl == this.url) return;
@@ -167,13 +167,12 @@ function loadTag(str) {
   str = str.replace(/\W/g, "");
   load("https://api.instagram.com/v1/tags/" + str +"/media/recent");
   $("qtag").value = str;
-  document.body.focus();
+  $("qtag").blur();
 }
 
 var maxCount = 500;
 
 function init() {
-  distal($("footer"), {loading: 1});
 
   slot.give = function(obj) {
     var n = $("body").appendChild($("page").cloneNode(true));
@@ -183,8 +182,8 @@ function init() {
     distal($("footer"), obj);
   };
 
-  slot.url = auth("https://api.instagram.com/v1/media/popular");
-  slot.get();
+  //slot.url = auth("https://api.instagram.com/v1/media/popular");
+  loadTag("wow");
 
   scroller.fire = function() {
     if(maxCount < 0) return;
