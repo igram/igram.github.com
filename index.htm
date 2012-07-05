@@ -26,12 +26,12 @@ body, input {font:bold 10pt Helvetica,Arial}
 .item {display:inline}
 .item .stats {display:none}
 .big {padding:3em 0 2% 0; vertical-align:middle; clear:both}
-.big .pic {height:auto; max-width:98%}
+.big .pic {height:auto; min-height:300px; min-width:150px; max-width:98%}
 
 ::-webkit-scrollbar {width:11px; height:11px; background:#000}
 ::-webkit-scrollbar-thumb {border-radius:11px; background:#555; box-shadow:inset 4px 2px 15px #aaa}
 
-@media (max-width:1000px) {
+@media (max-width:980px) {
   #header {font-size:100%}
   #header a, #header div {border:0; padding:0 5px}
   .pic {height:150px; min-width:80px}
@@ -108,7 +108,7 @@ var slot = {
   },
   jsonp: function(obj, u) {
     var data = obj.data;
-    if(document.body.clientWidth < 1000)
+    if(document.body.clientWidth < 980)
       for(var i=data.length - 1; i>=0; i--) data[i].images.low_resolution.url = data[i].images.thumbnail.url;
 
     u = (obj.pagination || {}).next_url;
