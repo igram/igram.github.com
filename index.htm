@@ -4,7 +4,7 @@
 <title>i:gram</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <style type="text/css">
 html, body, table, tr, td {margin:0; padding:0; border:0}
 body {background:#222}
@@ -167,6 +167,7 @@ function loadTag(str) {
   str = str.replace(/\W/g, "");
   load("https://api.instagram.com/v1/tags/" + str +"/media/recent");
   $("qtag").value = str;
+  document.body.focus();
 }
 
 var maxCount = 500;
