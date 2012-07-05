@@ -1,0 +1,216 @@
+<!doctype html>
+<html>
+<head>
+<title>i:gram</title>
+<style type="text/css">
+html, body, table, tr, td {margin:0; padding:0; border:0}
+body {background:#222}
+body, a {text-decoration:none; color:#fff; text-shadow:-1px -1px 0 #222}
+body, input {font:bold 10pt Helvetica,Arial}
+
+#header {position:fixed; overflow:auto; width:100%; font-size:120%; opacity:0.9; background:#666 -webkit-gradient(linear, left top, left bottom, from(#999), to(#666)); border-bottom:1px solid #777}
+#body {text-align:center; padding:3em 1% 5px 1%; background:#222; box-shadow:inset 20px 20px 100px #000}
+#footer {font:italic bold 200% Georgia,Times; text-align:center; margin:0.6em 0}
+
+#header a, #header div {float:left; color:#eee; height:2em; line-height:2em; padding:0 0.8em; border-left:1px solid #999; border-right:1px solid #444}
+#header input {width:10em; border-radius:2em; border:0; padding:0.2em 0.5em; box-shadow:0 0 10px #333; box-shadow:inset 1px 1px 6px #bbb}
+
+.pic {vertical-align:middle; height:306px; min-width:200px; margin:0.75%; box-shadow:1px 1px 15px #000; opacity:0.1; -webkit-transition:opacity 1s}
+.show {opacity:1}
+
+.stats {color:#fff; margin:0 10%}
+.tags {color:#333; cursor:pointer}
+.tags span {margin-right:0.5em}
+.by {color:#999; margin:0 0.5em}
+
+.item {display:inline}
+.item .stats {display:none}
+.big {padding:3em 0 2% 0; vertical-align:middle; clear:both}
+.big .pic {height:auto; max-width:98%}
+
+::-webkit-scrollbar {width:11px; height:11px; background:#000}
+::-webkit-scrollbar-thumb {border-radius:11px; background:#555; box-shadow:inset 4px 2px 15px #aaa}
+
+@media (max-width:1000px) {
+  #header {font-size:100%}
+  #header a, #header div {border:0; padding:0 5px}
+  .pic {height:150px; min-width:80px}
+  .big .pic {height:auto}
+  ::-webkit-scrollbar {width:9px}
+}
+</style>
+</head>
+<div id="header">
+  <a href="javascript:load('https://api.instagram.com/v1/media/popular');">Popular</a>
+  <div><input id=qtag type=text placeholder="Search by Tag" onchange="loadTag(this.value);"></div>
+</div>
+
+<div id="body">
+</div>
+
+<div id="footer">
+  <div data-qif="loading">Loading...</div>
+  <div data-qif="not:loading">
+    <div data-qif="not:hasmore">Fin.</div>
+    <a href="javascript:slot.get();scroller.halt=true;void(0);" data-qif="hasmore">Load more...</a>
+  </div>
+</div>
+
+<div style="display:none">
+<div id="page">
+  <div class="item" data-qrepeat="m data">
+    <div class="stats">
+      <span data-qtext="m.caption.text"></span>
+      <span class="by">by</span>
+      <span data-qattr="title m.user.username"><span data-qtext="m.user.full_name"></span> </span>
+    </div>
+    <img src="" class="pic" onclick="enlarge(this);" onload="this.className+=' show';"
+      data-qattr="src m.images.low_resolution.url; alt m.images.standard_resolution.url" border=0>
+    <div class="stats tags">
+      <span data-qrepeat="t m.tags" data-qattr="title t" onclick="loadTag(this.title);">
+        <span data-qtext="t"></span> 
+      </span>
+    </div>
+  </div>
+</div>
+</div>
+
+<script src="distal.js"></script>
+<script>
+function $(id) {return document.getElementById(id)}
+
+var cid = "client_id=05a13ce3908d4d5a89f89c93134537b3";
+
+function auth(url) {
+  return /\bclient_id=/.test(url) ? url : url + (/\?/.test(url) ? "&" : "?") + cid;
+}
+
+var slot = {
+  it: null,
+  want: false,
+  url: "",
+  get: function() {
+    if(this.it) {
+      this.give(this.it);
+      this.it = null;
+    } else {
+      this.want = true;
+      this.ask();
+    }
+  },
+  ask: function(d) {
+    if(!this.url || this.lastUrl == this.url) return;
+    this.lastUrl = this.url;
+    d = document;
+    d = d.body.appendChild(d.createElement("script"));
+    d.async = true;
+    d.src = this.url + "&callback=slot.jsonp";
+  },
+  jsonp: function(obj, u) {
+    var data = obj.data;
+    if(document.body.clientWidth < 1000)
+      for(var i=data.length - 1; i>=0; i--) data[i].images.low_resolution.url = data[i].images.thumbnail.url;
+
+    u = (obj.pagination || {}).next_url;
+    obj.hasmore = u && (this.url != u);
+    if(u) this.url = u;
+
+    if(this.want) {
+      this.want = false;
+      this.give(obj);
+    } else this.it = obj;
+  },
+
+  give: function() {}
+};
+
+var scroller = {
+  check: function() {
+    var d = document, de = d.documentElement || d.body;
+    d = d.body;
+    var t = Math.max(d.scrollTop, de.scrollTop);
+    var h = Math.min(d.clientHeight, de.clientHeight);
+    var s = Math.max(d.scrollHeight, de.scrollHeight);
+    if(!scroller.halt && t + h >= s - 200 && new Date().getTime() - scroller.time > 1000) {
+      scroller.time = new Date().getTime();
+      scroller.fire();
+    }
+    setTimeout(scroller.check, 400);
+  },
+
+  time: 0,
+  halt: false,
+  fire: function() {}
+};
+
+function enlarge(n) {
+  if(!n.alt) return;
+  n.src = n.alt;
+  n.alt = "";
+  n = n.parentNode;
+  n.className = "big";
+  n.scrollIntoView();
+}
+
+function load(url) {
+  $("body").innerHTML = "";
+  distal($("footer"), {loading:1});
+  slot.url = auth(url);
+  slot.get();
+}
+
+function loadTag(str) {
+  str = str.replace(/\W/g, "");
+  load("https://api.instagram.com/v1/tags/" + str +"/media/recent");
+  $("qtag").value = str;
+}
+
+var maxCount = 500;
+
+function init() {
+  distal($("footer"), {loading: 1});
+
+  slot.give = function(obj) {
+    var n = $("body").appendChild($("page").cloneNode(true));
+    n.id = null;
+    scroller.halt = false;
+    distal(n, obj);
+    distal($("footer"), obj);
+  };
+
+  slot.url = auth("https://api.instagram.com/v1/media/popular");
+  slot.get();
+
+  scroller.fire = function() {
+    if(maxCount < 0) return;
+    maxCount--;
+    scroller.halt = true;
+    slot.get();
+  }
+  scroller.check();
+}
+
+function explore(obj, sp) {
+  sp = sp || "";
+  switch(typeof obj) {
+    case "number": return obj;
+    case "boolean": return !!obj;
+    case "string": return "'" + obj.replace("'","\'") + "'";
+    default:
+      var arr = [];
+      if(obj === null) {
+        return "null";
+      } else if(obj instanceof Array) {
+        for(var i=0; i<obj.length; i++) arr.push(sp + "  " + explore(obj[i], sp + "  "));
+        return "[\n" + arr.join(",\n") + "\n" + sp + "]";
+      } else {
+        for(var i in obj) arr.push(sp + "  " + i + ":" + explore(obj[i], sp + "  "));
+        return "{\n" + arr.join(",\n") + "\n" + sp + "}";
+      }
+      throw 999;
+  }
+}
+
+init();
+</script>
+</html>
