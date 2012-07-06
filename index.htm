@@ -11,12 +11,12 @@ body {background:#222}
 body, a {text-decoration:none; color:#fff; text-shadow:-1px -1px 0 #222}
 body, input {font:bold 10pt Helvetica,Arial}
 
-#header {position:fixed; overflow:auto; width:100%; font-size:120%; opacity:0.8; background:#666 -webkit-gradient(linear, left top, left bottom, from(#999), to(#666)); border-bottom:1px solid #777}
+#header {position:fixed; overflow:auto; width:100%; font-size:120%; opacity:0.8; background:#555 -webkit-gradient(linear, left top, left bottom, from(#777), to(#444)); border-bottom:1px solid #555}
 #body {text-align:center; padding:3em 1% 5px 1%; background:#222; box-shadow:inset 20px 20px 100px #000}
 #footer {font:italic bold 200% Georgia,Times; text-align:center; margin:0.6em 0}
 
-#header a, #header div {float:left; color:#eee; height:2em; line-height:2em; padding:0 0.8em; border-left:1px solid #999; border-right:1px solid #444}
-#header input {width:10em; border-radius:2em; border:0; padding:0.2em 0.5em; box-shadow:0 0 10px #333; box-shadow:inset 1px 1px 6px #bbb}
+#header a, #header div {float:left; color:#eee; height:2em; line-height:2em; padding:0 0.8em; border-left:1px solid #888; border-right:1px solid #444}
+#header input {width:12em; border-radius:2em; border:0; padding:0.2em 0.5em; background:#fff; box-shadow:inset 1px 1px 6px #bbb}
 
 .pic {vertical-align:middle; height:300px; min-width:200px; margin:0.75%; box-shadow:1px 1px 15px #000; opacity:0.1; -webkit-transition:opacity 1s}
 .show {opacity:1}
@@ -35,9 +35,10 @@ body, input {font:bold 10pt Helvetica,Arial}
 ::-webkit-scrollbar-thumb {border-radius:11px; background:#555; box-shadow:inset 4px 2px 15px #aaa}
 
 @media (max-width:640px) {
-  #header {font-size:100%}
-  #header a, #header div {border:0; padding:0 5px}
-  .pic {height:150px; min-width:80px}
+  #body {padding:3em 0 5px 0}
+  #header {font-size:110%}
+  #header a, #header div {border:0; padding:0 6px}
+  .pic {height:150px; min-width:80px; margin:1px}
   .big .pic {height:auto}
   ::-webkit-scrollbar {width:9px}
 }
@@ -111,7 +112,7 @@ var slot = {
   },
   jsonp: function(obj, u) {
     var data = obj.data;
-    if(document.body.clientWidth < 980)
+    if(document.body.clientWidth < 640)
       for(var i=data.length - 1; i>=0; i--) data[i].images.low_resolution.url = data[i].images.thumbnail.url;
 
     u = (obj.pagination || {}).next_url;
@@ -159,6 +160,7 @@ function enlarge(n) {
 function load(url) {
   $("body").innerHTML = "";
   distal($("footer"), {loading:1});
+  slot.it = null;
   slot.url = auth(url);
   slot.get();
 }
@@ -173,6 +175,7 @@ function loadTag(str) {
 var maxCount = 500;
 
 function init() {
+  document.title = "i:gram";
 
   slot.give = function(obj) {
     var n = $("body").appendChild($("page").cloneNode(true));
