@@ -47,7 +47,7 @@ body, input {font:bold 10pt Helvetica,Arial}
 </head>
 <div id="header">
   <a href="javascript:load('https://api.instagram.com/v1/media/popular');">Popular</a>
-  <div><input id=qtag type=text placeholder="Search by Tag" onchange="loadTag(this.value);"></div>
+  <div><input id=qtag type=text placeholder="Search by Tag" onchange="loadTag(this.value);" autocorrect=off autocapitalize=off></div>
 </div>
 
 <div id="body">
@@ -167,8 +167,8 @@ function load(url) {
 }
 
 function loadTag(str) {
-  str = str.replace(/\W/g, "");
-  load(str ? "https://api.instagram.com/v1/tags/" + str +"/media/recent" : "https://api.instagram.com/v1/media/popular");
+  str = str.replace(/^\s|\s$/g, "");
+  load(str ? "https://api.instagram.com/v1/tags/" + encodeURIComponent(str) +"/media/recent" : "https://api.instagram.com/v1/media/popular");
   $("qtag").value = str;
   $("qtag").blur();
 }
@@ -186,7 +186,8 @@ function init() {
     distal($("footer"), obj);
   };
 
-  loadTag("wow");
+  var param = /(\?|&)tag=(.+)(&|$)/.exec(location.href);
+  loadTag(param ? decodeURIComponent(param[2]) : "wow");
 
   scroller.fire = function() {
     if(maxCount < 0) return;
