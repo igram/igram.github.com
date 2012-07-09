@@ -7,13 +7,13 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <style type="text/css">
 html, body, table, tr, td {margin:0; padding:0; border:0}
-body {background:#222}
+body {background:#222; box-shadow:inset 20px 20px 100px #000}
 body, a {text-decoration:none; color:#fff}
 body, input {font:bold 10pt Helvetica,Arial}
 
-#header {position:fixed; overflow:auto; width:100%; font-size:120%; opacity:0.7; background:#555; background:-webkit-gradient(linear, left top, left bottom, from(#555), to(#222)); border-bottom:1px solid #555; text-shadow:-1px -1px 0 #222}
-#body {text-align:center; padding:3em 1% 5px 1%; background:#222; box-shadow:inset 20px 20px 100px #000}
-#footer {font:italic bold 200% Georgia,Times; text-align:center; margin:0.6em 0; text-shadow:0 -1px 0 #000}
+#header {position:fixed; overflow:auto; width:100%; font-size:120%; opacity:0.7; background:#555; background:-webkit-gradient(linear, left top, left bottom, from(#555), to(#222)); border-bottom:1px solid #333; text-shadow:-1px -1px 0 #222}
+#body {text-align:center; padding:2em 1% 5px 1%}
+#footer {font:italic bold 200% Georgia,Times; text-align:center; padding:0.6em 0; text-shadow:0 -1px 0 #000}
 #legal {font:normal 9pt Helvetica,Arial; color:#555; margin-top:2em; line-height:1.5em}
 #legal a {color:#999}
 
@@ -31,7 +31,7 @@ body, input {font:bold 10pt Helvetica,Arial}
 
 .item {display:inline}
 .item .stats {display:none}
-.big {padding:3em 0 2% 0; vertical-align:middle; clear:both}
+.big {padding:3em 0 2% 0; vertical-align:middle; clear:both; word-wrap:break-word}
 .big .pic {height:auto; min-height:306px; min-width:306px; max-width:98%}
 
 #embed {margin:1em 0}
@@ -50,6 +50,7 @@ body, input {font:bold 10pt Helvetica,Arial}
 }
 </style>
 </head>
+<body>
 <div id="header">
   <a href="javascript:$('qtag').value='';load('https://api.instagram.com/v1/media/popular');">Popular</a>
   <div><input id=qtag type=text placeholder="Search by Tag" onchange="loadTag(this.value);" autocorrect=off autocapitalize=off></div>
@@ -65,7 +66,9 @@ body, input {font:bold 10pt Helvetica,Arial}
     <a href="javascript:slot.get();scroller.halt=true;void(0);" data-qif="hasmore">Load more...</a>
   </div>
   <div id="legal">
-    i:gram is a beta <a href="http://instagr.am">instagram</a> viewer for iPad not affiliated with instagram. <a href="javascript:distal($('footer'),{embed:1});" data-qif="not:embed">Embed me.</a>
+    i:gram is a beta <a href="http://instagr.am">instagram</a> viewer for iPad not affiliated with instagram.
+    <a href="https://github.com/igram/igram.github.com">Fork me.</a>
+    <a href="javascript:distal($('footer'),{embed:1});" data-qif="not:embed">Embed me.</a>
     <div id="embed" data-qif="embed" style="display:none">
       Copy and paste the following HTML code into your webpage:<br>
       <textarea spellcheck=false autocorrect=no><iframe src="http://igram.github.com/?tag=pepsi" width=500 height=230 frameborder=0></iframe></textarea>
@@ -84,8 +87,8 @@ body, input {font:bold 10pt Helvetica,Arial}
     <img src="" class="pic" onclick="enlarge(this);" onload="this.className+=' show';"
       data-qattr="src m.images.low_resolution.url; alt m.images.standard_resolution.url" border=0>
     <div class="stats tags">
-      <span class="like" data-qif="m.comments.count"><b data-qtext="m.comments.count .,"></b> &#9733;</span>
-      <span class="like" data-qif="m.likes.count"><b data-qtext="m.likes.count .,"></b> &hearts;</span>
+      <span class="like" data-qif="m.comments.count"><b data-qtext="m.comments.count .,"></b>&nbsp;&#9733;</span>
+      <span class="like" data-qif="m.likes.count"><b data-qtext="m.likes.count .,"></b>&nbsp;&hearts;</span>
       <span data-qrepeat="t m.tags" data-qattr="title t" onclick="loadTag(this.title);">
         <span data-qtext="t"></span> 
       </span>
@@ -214,4 +217,5 @@ function init() {
 }
 init();
 </script>
+</body>
 </html>
