@@ -24,9 +24,10 @@ body, input {font:bold 10pt Helvetica,Arial}
 .show {opacity:1}
 
 .stats {color:#fff; margin:0 10%}
-.tags {color:#333; cursor:pointer}
-.tags span {margin-right:0.5em}
+.tags {color:#333}
+.tags span {margin-right:0.5em; cursor:pointer}
 .by {color:#999; margin:0 0.5em}
+.tags .like {color:#666; cursor:default}
 
 .item {display:inline}
 .item .stats {display:none}
@@ -61,7 +62,7 @@ body, input {font:bold 10pt Helvetica,Arial}
     <div data-qif="not:hasmore">Fin.</div>
     <a href="javascript:slot.get();scroller.halt=true;void(0);" data-qif="hasmore">Load more...</a>
   </div>
-  <div id="legal">i:gram is a beta <a href="http://instagr.am">instagram</a> viewer designed for the iPhone, but works equally well in HTML5 browsers.</div>
+  <div id="legal">i:gram is a beta <a href="http://instagr.am">instagram</a> viewer for iPad not affiliated with instagram.</div>
 </div>
 
 <div style="display:none">
@@ -75,6 +76,8 @@ body, input {font:bold 10pt Helvetica,Arial}
     <img src="" class="pic" onclick="enlarge(this);" onload="this.className+=' show';"
       data-qattr="src m.images.low_resolution.url; alt m.images.standard_resolution.url" border=0>
     <div class="stats tags">
+      <span class="like" data-qif="m.comments.count"><b data-qtext="m.comments.count .,"></b> &#9733;</span>
+      <span class="like" data-qif="m.likes.count"><b data-qtext="m.likes.count .,"></b> &hearts;</span>
       <span data-qrepeat="t m.tags" data-qattr="title t" onclick="loadTag(this.title);">
         <span data-qtext="t"></span> 
       </span>
