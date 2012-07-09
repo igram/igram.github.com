@@ -8,13 +8,13 @@
 <style type="text/css">
 html, body, table, tr, td {margin:0; padding:0; border:0}
 body {background:#222}
-body, a {text-decoration:none; color:#fff; text-shadow:-1px -1px 0 #222}
+body, a {text-decoration:none; color:#fff}
 body, input {font:bold 10pt Helvetica,Arial}
 
-#header {position:fixed; overflow:auto; width:100%; font-size:120%; opacity:0.7; background:#555 -webkit-gradient(linear, left top, left bottom, from(#555), to(#222)); border-bottom:1px solid #555}
+#header {position:fixed; overflow:auto; width:100%; font-size:120%; opacity:0.7; background:#555; background:-webkit-gradient(linear, left top, left bottom, from(#555), to(#222)); border-bottom:1px solid #555; text-shadow:-1px -1px 0 #222}
 #body {text-align:center; padding:3em 1% 5px 1%; background:#222; box-shadow:inset 20px 20px 100px #000}
-#footer {font:italic bold 200% Georgia,Times; text-align:center; margin:0.6em 0}
-#legal {font:normal 9pt Helvetica,Arial; color:#555; margin-top:2em}
+#footer {font:italic bold 200% Georgia,Times; text-align:center; margin:0.6em 0; text-shadow:0 -1px 0 #000}
+#legal {font:normal 9pt Helvetica,Arial; color:#555; margin-top:2em; line-height:1.5em}
 #legal a {color:#999}
 
 #header a, #header div {float:left; color:#eee; height:2em; line-height:2em; padding:0 0.8em; border-left:1px solid #888; border-right:1px solid #444}
@@ -32,8 +32,10 @@ body, input {font:bold 10pt Helvetica,Arial}
 .item {display:inline}
 .item .stats {display:none}
 .big {padding:3em 0 2% 0; vertical-align:middle; clear:both}
-.big .pic {height:auto; min-height:306px; min-width:200px; max-width:98%}
+.big .pic {height:auto; min-height:306px; min-width:306px; max-width:98%}
 
+#embed {margin:1em 0}
+#embed textarea {width:25em; max-width:98%; height:3.5em; font-size:10pt}
 ::-webkit-scrollbar {width:11px; height:11px; background:#000}
 ::-webkit-scrollbar-thumb {border-radius:11px; background:#555; box-shadow:inset 4px 2px 15px #aaa}
 
@@ -49,7 +51,7 @@ body, input {font:bold 10pt Helvetica,Arial}
 </style>
 </head>
 <div id="header">
-  <a href="javascript:load('https://api.instagram.com/v1/media/popular');">Popular</a>
+  <a href="javascript:$('qtag').value='';load('https://api.instagram.com/v1/media/popular');">Popular</a>
   <div><input id=qtag type=text placeholder="Search by Tag" onchange="loadTag(this.value);" autocorrect=off autocapitalize=off></div>
 </div>
 
@@ -62,7 +64,13 @@ body, input {font:bold 10pt Helvetica,Arial}
     <div data-qif="not:hasmore">Fin.</div>
     <a href="javascript:slot.get();scroller.halt=true;void(0);" data-qif="hasmore">Load more...</a>
   </div>
-  <div id="legal">i:gram is a beta <a href="http://instagr.am">instagram</a> viewer for iPad not affiliated with instagram.</div>
+  <div id="legal">
+    i:gram is a beta <a href="http://instagr.am">instagram</a> viewer for iPad not affiliated with instagram. <a href="javascript:distal($('footer'),{embed:1});" data-qif="not:embed">Embed me.</a>
+    <div id="embed" data-qif="embed" style="display:none">
+      Copy and paste the following HTML code into your webpage:<br>
+      <textarea spellcheck=false autocorrect=no><iframe src="http://igram.github.com/?tag=pepsi" width=500 height=230 frameborder=0></iframe></textarea>
+    </div>
+  </div>
 </div>
 
 <div style="display:none">
