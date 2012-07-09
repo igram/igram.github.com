@@ -11,12 +11,14 @@ body {background:#222}
 body, a {text-decoration:none; color:#fff; text-shadow:-1px -1px 0 #222}
 body, input {font:bold 10pt Helvetica,Arial}
 
-#header {position:fixed; overflow:auto; width:100%; font-size:120%; opacity:0.7; background:#555 -webkit-gradient(linear, left top, left bottom, from(#777), to(#444)); border-bottom:1px solid #555}
+#header {position:fixed; overflow:auto; width:100%; font-size:120%; opacity:0.7; background:#555 -webkit-gradient(linear, left top, left bottom, from(#555), to(#222)); border-bottom:1px solid #555}
 #body {text-align:center; padding:3em 1% 5px 1%; background:#222; box-shadow:inset 20px 20px 100px #000}
 #footer {font:italic bold 200% Georgia,Times; text-align:center; margin:0.6em 0}
+#legal {font:normal 9pt Helvetica,Arial; color:#555; margin-top:2em}
+#legal a {color:#999}
 
 #header a, #header div {float:left; color:#eee; height:2em; line-height:2em; padding:0 0.8em; border-left:1px solid #888; border-right:1px solid #444}
-#header input {width:9em; border-radius:2em; border:0; padding:0.2em 0.5em; background:#fff; -webkit-box-shadow:inset 0px 1px 5px #777, inset 0px 1px 1px #000}
+#header input {width:9em; border-radius:2em; border:0; padding:0.2em 0.5em; -webkit-appearance:none; background:#fff; -webkit-box-shadow:inset 0px 1px 5px #777, inset 0px 1px 1px #000}
 
 .pic {vertical-align:middle; height:300px; min-width:200px; margin:0.75%; box-shadow:1px 1px 15px #000; opacity:0.1; -webkit-transition:opacity 1s}
 .show {opacity:1}
@@ -55,10 +57,11 @@ body, input {font:bold 10pt Helvetica,Arial}
 
 <div id="footer">
   <div data-qif="loading">Loading...</div>
-  <div data-qif="not:loading">
+  <div data-qif="not:loading" style="display:none">
     <div data-qif="not:hasmore">Fin.</div>
     <a href="javascript:slot.get();scroller.halt=true;void(0);" data-qif="hasmore">Load more...</a>
   </div>
+  <div id="legal">i:gram is a beta <a href="http://instagr.am">instagram</a> viewer designed for the iPhone, but works equally well in HTML5 browsers.</div>
 </div>
 
 <div style="display:none">
@@ -80,6 +83,7 @@ body, input {font:bold 10pt Helvetica,Arial}
 </div>
 </div>
 
+<!--http://distal.googlecode.com/svn/trunk/distal.js-->
 <script src="distal.js"></script>
 <script>
 function $(id) {return document.getElementById(id)}
@@ -197,28 +201,6 @@ function init() {
   }
   scroller.check();
 }
-
-function explore(obj, sp) {
-  sp = sp || "";
-  switch(typeof obj) {
-    case "number": return obj;
-    case "boolean": return !!obj;
-    case "string": return "'" + obj.replace("'","\'") + "'";
-    default:
-      var arr = [];
-      if(obj === null) {
-        return "null";
-      } else if(obj instanceof Array) {
-        for(var i=0; i<obj.length; i++) arr.push(sp + "  " + explore(obj[i], sp + "  "));
-        return "[\n" + arr.join(",\n") + "\n" + sp + "]";
-      } else {
-        for(var i in obj) arr.push(sp + "  " + i + ":" + explore(obj[i], sp + "  "));
-        return "{\n" + arr.join(",\n") + "\n" + sp + "}";
-      }
-      throw 999;
-  }
-}
-
 init();
 </script>
 </html>
